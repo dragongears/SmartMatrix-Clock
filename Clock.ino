@@ -70,7 +70,7 @@ void digitalClockDisplay() {
 
     t = hourFormat12();
     time[0] = '0' + t / 10;
-    if (time[0] = '0') time[0] = ' ';
+    if (time[0] == '0') time[0] = ' ';
     time[1] = '0' + t % 10;
 
     t = minute();
