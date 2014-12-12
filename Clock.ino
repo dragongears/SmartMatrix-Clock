@@ -1,6 +1,6 @@
 /*
  * SmartMatrix Clock
- * Version 0.2.0
+ * Version 0.2.1
  * Copyright (c) 2014 Art Dahm (art@dahm.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -70,7 +70,7 @@ void digitalClockDisplay() {
 
     t = hourFormat12();
     time[0] = '0' + t / 10;
-    if (time[0] = '0') time[0] = ' ';
+    if (time[0] == '0') time[0] = ' ';
     time[1] = '0' + t % 10;
 
     t = minute();
