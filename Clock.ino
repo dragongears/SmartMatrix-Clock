@@ -63,30 +63,35 @@ void digitalClockDisplay() {
 
     matrix.fillScreen({0x00, 0x00, 0x00});
 
-    matrix.setFont(font3x5);
+    matrix.setFont(font6x10);
 
     int t = 0;
-    char time[] = "00:00:00 AM";
+    char time[] = "00:00";
 
     t = hourFormat12();
     time[0] = '0' + t / 10;
+    if (time[0] = '0') time[0] = ' ';
     time[1] = '0' + t % 10;
 
     t = minute();
     time[3] = '0' + t / 10;
     time[4] = '0' + t % 10;
 
-    t = second();
-    time[6] = '0' + t / 10;
-    time[7] = '0' + t % 10;
+//    t = second();
+//    time[6] = '0' + t / 10;
+//    time[7] = '0' + t % 10;
 
-    if (isPM()) {
-      time[9] = 'P';
-    } else {
-      time[9] = 'A';
-    }
+//    if (isPM()) {
+//      time[6] = 'P';
+//    } else {
+//      time[6] = 'A';
+//    }
 
-    matrix.drawString(1, 16, {0xff, 0xff, 0}, time);
+  if (time[0] == ' ') {
+    matrix.drawString(5, 1, {0xff, 0xff, 0}, &time[1]);
+  } else {
+    matrix.drawString(1, 1, {0xff, 0xff, 0}, time);
+  }
 
     matrix.swapBuffers(true);
 }
