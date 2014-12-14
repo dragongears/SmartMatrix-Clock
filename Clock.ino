@@ -27,6 +27,8 @@
 SmartMatrix matrix;
 
 int brightness = 60;
+const rgb24 backgroundColor = {0, 0, 0};
+const rgb24 textColor = {0xff, 0xff, 0};
 
 char *months[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
@@ -58,13 +60,7 @@ void copyMonth(char *source, char *target)
 
 void digitalClockDisplay() {
   // digital clock display of the time
-//  Serial.print(day());
-//  Serial.print(" ");
-//  Serial.print(month());
-//  Serial.print(" ");
-//  Serial.print(year());
-
-    matrix.fillScreen({0x00, 0x00, 0x00});
+    matrix.fillScreen(backgroundColor);
 
     matrix.setFont(font5x7);
 
@@ -91,9 +87,9 @@ void digitalClockDisplay() {
     }
 
     if (time[0] == ' ') {
-        matrix.drawString(4, 8, {0xff, 0xff, 0}, &time[1]);
+        matrix.drawString(4, 8, textColor, &time[1]);
     } else {
-        matrix.drawString(1, 8, {0xff, 0xff, 0}, time);
+        matrix.drawString(1, 8, textColor, time);
     }
 
     int d = 0;
@@ -105,9 +101,9 @@ void digitalClockDisplay() {
     date[4] = '0' + t / 10;
     date[5] = '0' + t % 10;
 
-    matrix.drawString(1, 18, {0xff, 0xff, 0}, date);
+    matrix.drawString(1, 18, textColor, date);
 
-    matrix.swapBuffers(true);
+    matrix.swapBuffers(false);
 }
 
 time_t getTeensy3Time()
