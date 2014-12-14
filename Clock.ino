@@ -29,44 +29,35 @@ SmartMatrix matrix;
 int brightness = 60;
 
 void setup()  {
-  // set the Time library to use Teensy 3.0's RTC to keep time
-  setSyncProvider(getTeensy3Time);
+    // set the Time library to use Teensy 3.1's RTC to keep time
+    setSyncProvider(getTeensy3Time);
 
-  matrix.begin();
-  matrix.setBrightness(brightness*(255/100));
+    matrix.begin();
+    matrix.setBrightness(brightness*(255/100));
 }
 
 void loop() {
-//  if (Serial.available()) {
-//    time_t t = processSyncMessage();
-//    if (t != 0) {
 //      Teensy3Clock.set(t); // set the RTC
 //      setTime(t);
-//    }
-//  }
-  digitalClockDisplay();
-  delay(1000);
+
+    digitalClockDisplay();
+    delay(100);
 }
 
 void digitalClockDisplay() {
   // digital clock display of the time
-//  Serial.print(hour());
-//  printDigits(minute());
-//  printDigits(second());
-//  Serial.print(" ");
 //  Serial.print(day());
 //  Serial.print(" ");
 //  Serial.print(month());
 //  Serial.print(" ");
 //  Serial.print(year());
-//  Serial.println();
 
     matrix.fillScreen({0x00, 0x00, 0x00});
 
-    matrix.setFont(font6x10);
+    matrix.setFont(font5x7);
 
     int t = 0;
-    char time[] = "00:00";
+    char time[] = "00:00A";
 
     t = hourFormat12();
     time[0] = '0' + t / 10;
@@ -77,26 +68,26 @@ void digitalClockDisplay() {
     time[3] = '0' + t / 10;
     time[4] = '0' + t % 10;
 
-//    t = second();
-//    time[6] = '0' + t / 10;
-//    time[7] = '0' + t % 10;
+    if (second()%2 != 0) {
+        time[2] = ' ';
+    }
 
-//    if (isPM()) {
-//      time[6] = 'P';
-//    } else {
-//      time[6] = 'A';
-//    }
+    if (isPM()) {
+        time[5] = 'P';
+    } else {
+        time[5] = 'A';
+    }
 
-  if (time[0] == ' ') {
-    matrix.drawString(5, 1, {0xff, 0xff, 0}, &time[1]);
-  } else {
-    matrix.drawString(1, 1, {0xff, 0xff, 0}, time);
-  }
+    if (time[0] == ' ') {
+        matrix.drawString(4, 1, {0xff, 0xff, 0}, &time[1]);
+    } else {
+        matrix.drawString(1, 1, {0xff, 0xff, 0}, time);
+    }
 
     matrix.swapBuffers(true);
 }
 
 time_t getTeensy3Time()
 {
-  return Teensy3Clock.get();
+    return Teensy3Clock.get();
 }
