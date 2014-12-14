@@ -1,6 +1,6 @@
 /*
  * SmartMatrix Clock
- * Version 0.3.0
+ * Version 0.4.0
  * Copyright (c) 2014 Art Dahm (art@dahm.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -28,6 +28,8 @@ SmartMatrix matrix;
 
 int brightness = 60;
 
+char *months[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+
 void setup()  {
     // set the Time library to use Teensy 3.1's RTC to keep time
     setSyncProvider(getTeensy3Time);
@@ -42,6 +44,16 @@ void loop() {
 
     digitalClockDisplay();
     delay(100);
+}
+
+void copyMonth(char *source, char *target)
+{
+   while(*source)
+   {
+      *target = *source;
+      source++;
+      target++;
+   }
 }
 
 void digitalClockDisplay() {
@@ -79,10 +91,21 @@ void digitalClockDisplay() {
     }
 
     if (time[0] == ' ') {
-        matrix.drawString(4, 1, {0xff, 0xff, 0}, &time[1]);
+        matrix.drawString(4, 8, {0xff, 0xff, 0}, &time[1]);
     } else {
-        matrix.drawString(1, 1, {0xff, 0xff, 0}, time);
+        matrix.drawString(1, 8, {0xff, 0xff, 0}, time);
     }
+
+    int d = 0;
+    char date[] = "Jan 01";
+
+    copyMonth(months[month()-1], date);
+
+    t = day();
+    date[4] = '0' + t / 10;
+    date[5] = '0' + t % 10;
+
+    matrix.drawString(1, 18, {0xff, 0xff, 0}, date);
 
     matrix.swapBuffers(true);
 }
