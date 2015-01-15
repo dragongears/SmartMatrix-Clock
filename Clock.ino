@@ -1,6 +1,6 @@
 /*
  * SmartMatrix Clock
- * Version 0.4.1
+ * Version 0.4.2
  * Copyright (c) 2014 Art Dahm (art@dahm.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -110,3 +110,8 @@ time_t getTeensy3Time()
 {
     return Teensy3Clock.get();
 }
+
+//TODO: Font size
+//TODO: Set time and date
+//TODO: 12/24 Hour time
+//TODO: Color cycling
