@@ -1,6 +1,6 @@
 /*
  * SmartMatrix Clock
- * Version 0.4.2
+ * Version 0.5.0
  * Copyright (c) 2014 Art Dahm (art@dahm.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
