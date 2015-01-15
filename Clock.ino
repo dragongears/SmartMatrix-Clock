@@ -1,6 +1,6 @@
 /*
  * SmartMatrix Clock
- * Version 0.4.2
+ * Version 0.5.0
  * Copyright (c) 2014 Art Dahm (art@dahm.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -62,10 +62,10 @@ void digitalClockDisplay() {
   // digital clock display of the time
     matrix.fillScreen(backgroundColor);
 
-    matrix.setFont(font5x7);
+    matrix.setFont(gohufont11b);
 
     int t = 0;
-    char time[] = "00:00A";
+    char time[] = "00:00";
 
     t = hourFormat12();
     time[0] = '0' + t / 10;
@@ -80,17 +80,13 @@ void digitalClockDisplay() {
         time[2] = ' ';
     }
 
-    if (isPM()) {
-        time[5] = 'P';
+    if (time[0] == ' ') {
+        matrix.drawString(5, 5, textColor, &time[1]);
     } else {
-        time[5] = 'A';
+        matrix.drawString(1, 5, textColor, time);
     }
 
-    if (time[0] == ' ') {
-        matrix.drawString(4, 8, textColor, &time[1]);
-    } else {
-        matrix.drawString(1, 8, textColor, time);
-    }
+    matrix.setFont(font5x7);
 
     int d = 0;
     char date[] = "Jan 01";
@@ -101,7 +97,7 @@ void digitalClockDisplay() {
     date[4] = '0' + t / 10;
     date[5] = '0' + t % 10;
 
-    matrix.drawString(1, 18, textColor, date);
+    matrix.drawString(1, 19, textColor, date);
 
     matrix.swapBuffers(false);
 }
@@ -111,7 +107,6 @@ time_t getTeensy3Time()
     return Teensy3Clock.get();
 }
 
-//TODO: Font size
 //TODO: Set time and date
 //TODO: 12/24 Hour time
 //TODO: Color cycling
