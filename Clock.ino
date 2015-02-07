@@ -23,12 +23,14 @@
 
 #include <Time.h>
 #include <SmartMatrix_32x32.h>
+#include "ColorCycle.h"
 
 SmartMatrix matrix;
+ColorCycle timeColor;
+ColorCycle dateColor;
 
 int brightness = 60;
 const rgb24 backgroundColor = {0, 0, 0};
-const rgb24 textColor = {0xff, 0xff, 0};
 
 char *months[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
@@ -41,9 +43,6 @@ void setup()  {
 }
 
 void loop() {
-//      Teensy3Clock.set(t); // set the RTC
-//      setTime(t);
-
     digitalClockDisplay();
     delay(100);
 }
@@ -59,7 +58,10 @@ void copyMonth(char *source, char *target)
 }
 
 void digitalClockDisplay() {
-  // digital clock display of the time
+
+	rgb24 currentTimeColor = timeColor.nextColor();
+	rgb24 currentDateColor = dateColor.nextColor();
+
     matrix.fillScreen(backgroundColor);
 
     matrix.setFont(gohufont11b);
@@ -81,9 +83,9 @@ void digitalClockDisplay() {
     }
 
     if (time[0] == ' ') {
-        matrix.drawString(5, 5, textColor, &time[1]);
+        matrix.drawString(5, 5, currentTimeColor, &time[1]);
     } else {
-        matrix.drawString(1, 5, textColor, time);
+        matrix.drawString(1, 5, currentTimeColor, time);
     }
 
     matrix.setFont(font5x7);
@@ -97,16 +99,14 @@ void digitalClockDisplay() {
     date[4] = '0' + t / 10;
     date[5] = '0' + t % 10;
 
-    matrix.drawString(1, 19, textColor, date);
+    matrix.drawString(1, 19, currentDateColor, date);
 
     matrix.swapBuffers(false);
 }
 
-time_t getTeensy3Time()
-{
+time_t getTeensy3Time() {
     return Teensy3Clock.get();
 }
 
 //TODO: Set time and date
 //TODO: 12/24 Hour time
-//TODO: Color cycling
