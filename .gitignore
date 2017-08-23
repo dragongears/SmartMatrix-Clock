@@ -29,4 +29,6 @@
 *.out
 *.app
 
-
+.vscode
+.idea
+*.iml
