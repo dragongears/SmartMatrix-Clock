@@ -28,14 +28,17 @@
 #include <stdint.h>
 #include <SmartMatrix_32x32.h>
 
-#define RGB_COUNT 3
-
 class ColorCycle {
-	uint8_t color[RGB_COUNT];
-	uint8_t newColor[RGB_COUNT];
-  public:
-    ColorCycle ();
-    rgb24 nextColor();
+    public:
+        // Constructor. The argument passed to the step parameter is the
+        // granularity of the color change when nextColor is called.
+        ColorCycle (uint8_t step = 1);
+        // Steps to the next color in the color cycle and returns it
+        rgb24 nextColor();
+	private:
+		int16_t color_[3];
+		int16_t delta_[3];
+		uint8_t step_;
 };
 
 #endif  /* _ColorCycle_h */

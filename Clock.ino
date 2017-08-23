@@ -1,6 +1,6 @@
 /*
  * SmartMatrix Clock
- * Version 0.6.0
+ * Version 0.7.0
  * Copyright (c) 2014 Art Dahm (art@dahm.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -26,13 +26,13 @@
 #include "ColorCycle.h"
 
 SmartMatrix matrix;
-ColorCycle timeColor;
-ColorCycle dateColor;
+ColorCycle timeColor(2);
+ColorCycle dateColor(2);
 
 int brightness = 60;
 const rgb24 backgroundColor = {0, 0, 0};
 
-char *months[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+char const *months[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
 
 void setup()  {
     // set the Time library to use Teensy 3.1's RTC to keep time
@@ -47,7 +47,7 @@ void loop() {
     delay(100);
 }
 
-void copyMonth(char *source, char *target)
+void copyMonth(char const *source, char *target)
 {
    while(*source)
    {
@@ -90,7 +90,6 @@ void digitalClockDisplay() {
 
     matrix.setFont(font5x7);
 
-    int d = 0;
     char date[] = "Jan 01";
 
     copyMonth(months[month()-1], date);

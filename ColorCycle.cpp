@@ -24,11 +24,14 @@
 #include "ColorCycle.h"
 
 // Constructor
-ColorCycle::ColorCycle () {
+ColorCycle::ColorCycle (uint8_t step) {
 
-	// Initialize color
-	for(int i = 0; i < RGB_COUNT; i++) {
-		color[i] = newColor[i] = 255;
+	step_ = step;
+
+	// Initialize color and delta
+	for(int i = 0; i < 3; i++) {
+		color_[i] = 255;
+		delta_[i] = 0;
 	}
 
 }
@@ -38,27 +41,36 @@ rgb24 ColorCycle::nextColor() {
 
 	uint8_t done = 0;
 
-	for(int i=0; i < RGB_COUNT; i++) {
-		// If this PWM has reached its new color increment done
-		if (color[i] == newColor[i]) {
+	// Change the RGB colors that haven't reached max or min brightness
+	for(int i = 0; i < 3; i++) {
+		if (delta_[i] == 0) {
 			done++;
-		// Move PWM towards its new color
-		} else if (color[i] < newColor[i]) {
-			color[i] += 1;
-		} else if (color[i] > newColor[i]) {
-			color[i] -= 1;
+		} else {
+			color_[i] += delta_[i];
+			// Stop changing if <= 0
+			if (color_[i] <= 0) {
+				color_[i] = 0;
+				delta_[i] = 0;
+			// Stop changing if >= 255
+			} else if (color_[i] >= 255) {
+				color_[i] = 255;
+				delta_[i] = 0;
+			}
 		}
 	}
 
-	// If all the PWMs have reached their new colors
-	if (done == RGB_COUNT) {
+	// If all the colors have reached their new colors and are no longer changing
+	if (done == 3) {
 		// Pick a random RGB color (other than black)
-		uint8_t randomColor = (rand() % 6) + 1;
-		// Set red, green, and blue components to maximum brightness
-		for(int i=0; i < RGB_COUNT; i++) {
-			newColor[i] = ((randomColor >> i) & 0x01) * 255;
+		uint8_t random_color = (rand() % 6) + 1;
+		for(int i=0; i < 3; i++) {
+			if (((random_color >> i) & 0x01) * 255 >= color_[i]) {
+				delta_[i] = step_;
+			} else {
+				delta_[i] = -step_;
+			}
 		}
 	}
 
-	return {color[0], color[1], color[2]};
+	return {(uint8_t)color_[0], (uint8_t)color_[1], (uint8_t)color_[2]};
 }
