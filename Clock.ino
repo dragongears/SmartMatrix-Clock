@@ -81,6 +81,10 @@ void digitalClockDisplay() {
 
     matrix.setFont(gohufont11b);
 
+    if (isPM()) {
+        matrix.fillRectangle(30, 7, 31, 8, currentTimeColor);
+    }
+
     int t = 0;
     char time[] = "00:00";
 
@@ -100,7 +104,7 @@ void digitalClockDisplay() {
     if (time[0] == ' ') {
         matrix.drawString(5, 5, currentTimeColor, &time[1]);
     } else {
-        matrix.drawString(1, 5, currentTimeColor, time);
+        matrix.drawString(isPM() ? 0 : 1, 5, currentTimeColor, time);
     }
 
     matrix.setFont(font5x7);
@@ -131,7 +135,7 @@ unsigned long processSyncMessage() {
 
     if(Serial.find(TIME_HEADER)) {
         pctime = Serial.parseInt();
-        return pctime;
+        // return pctime;
         if( pctime < DEFAULT_TIME) { // check the value is a valid time (greater than Jan 1 2013)
             pctime = 0L; // return 0 to indicate that the time is not valid
         }
@@ -140,5 +144,5 @@ unsigned long processSyncMessage() {
 }
 
 //TODO: Set time and date via IR remote
+//TODO: Set time and date via internet
 //TODO: 12/24 Hour time
-//TODO: AM/PM indicator
